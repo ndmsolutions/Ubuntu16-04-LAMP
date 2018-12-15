@@ -20,10 +20,12 @@ fi
 function basic_server_setup {
     
     if [ $ADD_SWAP = 'yes' ]; then
-        fallocate -l $SWAP_SIZE /swapfilea
-        chmod 600 /swapfilea
-        mkswap /swapfilea
-        swapon /swapfilea
+        fallocate -l $SWAP_SIZE /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+        free -h
     fi
 
     aptitude update && aptitude -y safe-upgrade
