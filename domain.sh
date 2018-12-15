@@ -95,7 +95,7 @@ function add_domain {
 <h1>Welcome to $DOMAIN</h1>
 <p>This page is simply a placeholder for your domain. Place your content in the appropriate directory to see it here. </p>
 <p>Please replace or delete index.html when uploading or creating your site.</p>
-<p>View MySQL/PHP Info <a href="http://$DOMAIN/info.php">Open</a></p>
+<p>View PHP Info <a href="http://$DOMAIN/phpinfo.php">Open</a></p>
 </body>
 </html>
 EOF
@@ -104,44 +104,6 @@ EOF
 <?php 
 
     echo phpinfo();
-
-?>
-EOF
-
-    cat > $DOMAIN_PATH/public_html/info.php <<EOF
-
-<?php 
-
-\$processUser = posix_getpwuid( posix_geteuid() );
-echo \$processUser('name');
-
-\$link = mysql_connect("localhost", "root", "$MYSQL_ROOT_PASSWORD");
-if (!\$link) die('Could not connect: ' . mysql_error());
-
-echo "<h3>MySQL Version:</h3>";
-
-print "MySQL server version: " . mysql_get_server_info() . "</br>";
-mysql_close(\$link);
-
-echo "<h3>Current PHP version:</h3>";
-echo phpversion();
-
-echo "<h3>List All PHP Extensions:</h3>";
-
-
-\$extdir = ini_get('extension_dir');
-
-\$modules = get_loaded_extensions();
-
-foreach(\$modules as \$m){
-    \$lib = \$extdir.'/'.\$m.'.so';
-    if (file_exists(\$lib)) {
-        print "---- \$m: dynamically loaded</br>";
-    } else {
-        print "---- \$m: statically loaded</br>";
-    }
-}
-
 
 ?>
 EOF
@@ -183,7 +145,7 @@ EOF
     </Directory>
         
     <FilesMatch "\.php$">
-        SetHandler "proxy:unix:///var/run/php/php$PHP_VERSION_INSTALL-fpm-$DOMAIN_OWNER.sock|fcgi://$DOMAIN/"
+        SetHandler "proxy:unix:///var/run/php/php7.0-fpm-$DOMAIN_OWNER.sock|fcgi://$DOMAIN/"
     </FilesMatch>
 
 </VirtualHost>
@@ -206,7 +168,7 @@ EOF
     </Directory>
 
     <FilesMatch "\.php$">
-        SetHandler "proxy:unix:///var/run/php/php$PHP_VERSION_INSTALL-fpm-$DOMAIN_OWNER.sock|fcgi://$DOMAIN/"
+        SetHandler "proxy:unix:///var/run/php/php7.0-fpm-$DOMAIN_OWNER.sock|fcgi://$DOMAIN/"
     </FilesMatch>
 
     SSLEngine on
